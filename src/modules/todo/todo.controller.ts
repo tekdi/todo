@@ -4,29 +4,28 @@ import {
   Post,
   UsePipes,
   ValidationPipe,
-} from '@nestjs/common';
-import { ApiBadRequestResponse, ApiCreatedResponse } from '@nestjs/swagger';
-import { TodoService } from './todo.service';
+} from "@nestjs/common";
+import { ApiBadRequestResponse, ApiCreatedResponse } from "@nestjs/swagger";
+import { TodoService } from "./todo.service";
 
-
-@Controller('todo')
+@Controller("todo")
 export class TodoController {
   constructor(private readonly todoService: TodoService) { }
 
-  @Post('/create')
+  @Post("/create")
   @UsePipes(new ValidationPipe())
-  @ApiCreatedResponse({ description: 'toDo created' })
-  @ApiBadRequestResponse({ description: 'Bad request' })
+  @ApiCreatedResponse({ description: "toDo created" })
+  @ApiBadRequestResponse({ description: "Bad request" })
   async createTo() {
     return true;
   }
 
-  @Post('/list')
+  @Post("/list")
   async viewList() {
     return true;
   }
 
-  @Patch('/:id')
+  @Patch("/:id")
   async updateTodo() {
     return true;
   }
