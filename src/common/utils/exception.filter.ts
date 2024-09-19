@@ -12,10 +12,8 @@ import { ERROR_MESSAGES } from "../utils/constants.util";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private readonly apiId?: string) {}
-
+  constructor(private readonly apiId?: string) { }
   catch(exception: unknown, host: ArgumentsHost) {
-    console.log("exception", exception);
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
     const status =
@@ -38,7 +36,6 @@ export class AllExceptionsFilter implements ExceptionFilter {
       return response.status(statusCode).json(errorResponse);
     }
     const detailedErrorMessage = `${errorMessage}`;
-    console.log("detailedErrorMessage", detailedErrorMessage);
     const errorResponse = APIResponse.error(
       this.apiId,
       detailedErrorMessage,
