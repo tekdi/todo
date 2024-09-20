@@ -12,7 +12,7 @@ import { ERROR_MESSAGES } from "../utils/constants.util";
 
 @Catch()
 export class AllExceptionsFilter implements ExceptionFilter {
-  constructor(private readonly apiId?: string) { }
+  constructor(private readonly apiId?: string) {}
   catch(exception: unknown, host: ArgumentsHost) {
     const ctx = host.switchToHttp();
     const response = ctx.getResponse<Response>();
