@@ -23,10 +23,10 @@ export class Todo {
   @Column({ type: "varchar", nullable: true })
   context: string;
 
-  @Column({ type: "uuid", nullable: true })
+  @Column({ type: "uuid" })
   assigned_by: string;
 
-  @Column({ type: "uuid", nullable: true })
+  @Column({ type: "uuid" })
   assigned_to: string;
 
   @Column({ type: "date", nullable: true })
@@ -44,23 +44,26 @@ export class Todo {
   @Column({ type: "varchar", length: 100, nullable: true })
   type: string;
 
-  @Column({ type: "uuid", name: "createdBy" })
-  createdBy: string;
+  @Column({ type: "uuid", name: "created_by" })
+  created_by: string;
 
-  @Column({ type: "uuid", name: "updatedBy" })
-  updatedBy: string;
+  @Column({ type: "uuid", name: "updated_by" })
+  updated_by: string;
 
-  @Column({ type: "date", name: "createdAt" })
-  createdAt: Date;
+  @Column({ type: "date", name: "created_at" })
+  created_at: Date;
 
-  @Column({ type: "date", name: "updatedAt" })
-  updatedAt: Date;
+  @Column({ type: "date", name: "updated_at" })
+  updated_at: Date;
 
   @Column({ type: "time", nullable: true })
   ideal_time: string;
 
   @Column({ type: "time", nullable: true })
   spent_time: string;
+
+  @Column({ type: "date", name: "completion_date" })
+  completion_date: Date
 
   @Column({ type: "jsonb", nullable: true })
   action_data: object;

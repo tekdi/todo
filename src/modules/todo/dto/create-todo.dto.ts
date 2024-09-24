@@ -156,20 +156,20 @@ export class CreateTodoDto {
 
   @ApiProperty({
     type: String,
-    description: "createdBy",
+    description: "created_by",
     example: "eff008a8-2573-466d-b877-fddf6a4fc13e",
   })
   @IsNotEmpty()
-  createdBy: string;
+  created_by: string;
 
   @ApiProperty({
     type: String,
-    description: "updatedBy",
+    description: "updated_by",
     example: "eff008a8-2573-466d-b877-fddf6a4fc13e",
   })
   @IsNotEmpty()
-  updatedBy: string;
+  updated_by: string;
 
-  createdAt: Date;
-  updatedAt: Date;
+  created_at: Date;
+  updated_at: Date;
 }

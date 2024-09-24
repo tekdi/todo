@@ -16,8 +16,8 @@ export class TodoService {
 
   async createTodo(createTodoDto: CreateTodoDto, response: Response) {
     const apiId = API_ID.CREATE_TODO;
-    createTodoDto.createdAt = new Date();
-    createTodoDto.updatedAt = new Date();
+    createTodoDto.created_at = new Date();
+    createTodoDto.updated_at = new Date();
     if (createTodoDto?.action_data?.action_name) {
       const result = await this.checkExistingRequest(
         createTodoDto.assigned_by,
