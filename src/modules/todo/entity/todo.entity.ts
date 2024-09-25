@@ -1,4 +1,4 @@
-import { Entity, Column, PrimaryGeneratedColumn } from "typeorm";
+import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
 
 @Entity("todo")
 export class Todo {
@@ -50,10 +50,16 @@ export class Todo {
   @Column({ type: "uuid", name: "updated_by" })
   updated_by: string;
 
-  @Column({ type: "date", name: "created_at" })
+  @CreateDateColumn({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   created_at: Date;
 
-  @Column({ type: "date", name: "updated_at" })
+  @UpdateDateColumn({
+    type: 'date',
+    default: () => 'CURRENT_TIMESTAMP',
+  })
   updated_at: Date;
 
   @Column({ type: "time", nullable: true })
