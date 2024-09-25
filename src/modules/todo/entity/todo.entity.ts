@@ -50,16 +50,10 @@ export class Todo {
   @Column({ type: "uuid", name: "updated_by" })
   updated_by: string;
 
-  @CreateDateColumn({
-    type: 'date',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @CreateDateColumn({ type: 'timestamptz', default: () => 'now()', nullable: false })
   created_at: Date;
 
-  @UpdateDateColumn({
-    type: 'date',
-    default: () => 'CURRENT_TIMESTAMP',
-  })
+  @UpdateDateColumn({ type: 'timestamptz', default: () => 'now()', nullable: false })
   updated_at: Date;
 
   @Column({ type: "time", nullable: true })
