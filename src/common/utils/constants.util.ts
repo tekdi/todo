@@ -6,8 +6,15 @@ export const ERROR_MESSAGES = {
   BAD_REQUEST: "Bad request",
   INVALID_REQUEST_BODY: "Invalid request body",
   INTERNAL_SERVER_ERROR: "Internal Server Error",
+  SERVICE_UNAVAILABLE:
+    "Notification service is unreachable. Please try again later.",
+  ERROR: "Error occurred",
+  UNEXPECTED_ERROR: "An unexpected error occurred",
+  REQUESTED: "A request for the same action already exists."
 };
 
 export const SUCCESS_MESSAGES = {};
 
-export const API_ID = {};
+export const API_ID = {
+  CREATE_TODO: "api.todo.create",
+};
