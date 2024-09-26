@@ -5,7 +5,9 @@ export enum ACTIONTYPE {
 
 export enum STATE {
   PUBLISH = "publish",
-  UNPUBLISH = "unpublish",
+  DRAFT = "draft",
+  ARCHIVED = "archived"
+
 }
 
 export enum TYPE {
@@ -17,7 +19,7 @@ export enum CONTEXT {
   COHORT = "cohort",
 }
 export enum STATUS {
-  INCOMPLTE = "incomplete",
-  COMPLTE = "complete",
-  REJETED = "rejected",
+  INCOMPLETE = "incomplete",
+  COMPLETE = "complete",
+  REJECTED = "rejected",
 }

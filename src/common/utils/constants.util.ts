@@ -10,11 +10,16 @@ export const ERROR_MESSAGES = {
     "Notification service is unreachable. Please try again later.",
   ERROR: "Error occurred",
   UNEXPECTED_ERROR: "An unexpected error occurred",
-  REQUESTED: "A request for the same action already exists."
+  REQUESTED: "A request for the same action already exists.",
+  TODO_NOT_FOUND: 'Todos not found',
 };
 
-export const SUCCESS_MESSAGES = {};
+export const SUCCESS_MESSAGES = {
+  TODO_CREATED: "Todo Created",
+  TODO_LIST: "Todo List fetched successfully"
+};
 
 export const API_ID = {
   CREATE_TODO: "api.todo.create",
+  LIST_TODO: "api.todo.list"
 };
