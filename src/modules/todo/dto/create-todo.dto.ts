@@ -11,6 +11,7 @@ import {
   ValidateNested,
   IsEnum,
   IsArray,
+  IsIn,
 } from "class-validator";
 import { ACTIONTYPE, CONTEXT, STATE, TYPE } from "src/common/utils/types";
 
@@ -118,10 +119,6 @@ export class CreateTodoDto {
   @IsOptional()
   due_date?: string;
 
-  @IsString()
-  @IsOptional()
-  ideal_time?: string;
-
   @ApiProperty({ description: "state", example: "publish" })
   @IsEnum(STATE, { message: "state should be publish , unpublish" })
   @IsString()
@@ -169,6 +166,16 @@ export class CreateTodoDto {
   })
   @IsNotEmpty()
   updated_by: string;
+
+  @ApiProperty({
+    description: "The status of the task",
+    example: "incomplete",
+  })
+  @IsString()
+  @IsIn(["incomplete"], {
+    message: "Status must be incomplete",
+  })
+  status?: string;
 
   created_at: Date;
   updated_at: Date;

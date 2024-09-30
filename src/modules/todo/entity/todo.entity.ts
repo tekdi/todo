@@ -1,4 +1,10 @@
-import { Entity, Column, PrimaryGeneratedColumn, CreateDateColumn, UpdateDateColumn } from "typeorm";
+import {
+  Entity,
+  Column,
+  PrimaryGeneratedColumn,
+  CreateDateColumn,
+  UpdateDateColumn,
+} from "typeorm";
 
 @Entity("todo")
 export class Todo {
@@ -50,10 +56,18 @@ export class Todo {
   @Column({ type: "uuid", name: "updated_by" })
   updated_by: string;
 
-  @CreateDateColumn({ type: 'timestamptz', default: () => 'now()', nullable: false })
+  @CreateDateColumn({
+    type: "timestamptz",
+    default: () => "now()",
+    nullable: false,
+  })
   created_at: Date;
 
-  @UpdateDateColumn({ type: 'timestamptz', default: () => 'now()', nullable: false })
+  @UpdateDateColumn({
+    type: "timestamptz",
+    default: () => "now()",
+    nullable: false,
+  })
   updated_at: Date;
 
   @Column({ type: "time", nullable: true })
@@ -63,7 +77,7 @@ export class Todo {
   spent_time: string;
 
   @Column({ type: "date", name: "completion_date" })
-  completion_date: Date
+  completion_date: Date;
 
   @Column({ type: "jsonb", nullable: true })
   action_data: object;
