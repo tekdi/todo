@@ -20,25 +20,25 @@ export class TodoService {
   constructor(
     @InjectRepository(Todo)
     private readonly todoRepository: Repository<Todo>,
-  ) {}
+  ) { }
 
   async createTodo(createTodoDto: CreateTodoDto, response: Response) {
     const apiId = API_ID.CREATE_TODO;
     if (createTodoDto?.action_data?.action_name) {
-      const result = await this.checkExistingRequest(
+      const existTodo = await this.checkExistingRequest(
         createTodoDto.assigned_by,
         createTodoDto.context_id,
         createTodoDto.action_data.action_name,
       );
-      if (result) {
+      if (existTodo) {
         throw new BadRequestException(ERROR_MESSAGES.REQUESTED);
       }
     }
 
-    const save = await this.todoRepository.save(createTodoDto);
+    const saveTodo = await this.todoRepository.save(createTodoDto);
     return response
       .status(HttpStatus.CREATED)
-      .json(APIResponse.success(apiId, save, "CREATED"));
+      .json(APIResponse.success(apiId, saveTodo, "CREATED"));
   }
 
   async checkExistingRequest(
@@ -46,7 +46,7 @@ export class TodoService {
     context_id: string,
     action_name: string,
   ) {
-    const result = await this.todoRepository
+    const isExistTodo = await this.todoRepository
       .createQueryBuilder("todo")
       .where("todo.assigned_by = :assigned_by", { assigned_by })
       .andWhere("todo.context_id = :context_id", { context_id })
@@ -55,7 +55,7 @@ export class TodoService {
       })
       .andWhere("todo.status = :status", { status: "incomplete" })
       .getOne();
-    return result;
+    return isExistTodo;
   }
   async viewListTodo(filterRequestDTO: FilterRequestDTO, response: Response) {
     const apiId = API_ID.LIST_TODO;
@@ -83,14 +83,14 @@ export class TodoService {
     // Append LIMIT and OFFSET to the query
     finalQuery += ` LIMIT ${limit} OFFSET ${offset}`;
 
-    const result = await this.todoRepository.query(finalQuery, queryParams);
-    const totalCount = result[0]?.total_count;
-    if (result.length === 0) {
+    const fecthTodo = await this.todoRepository.query(finalQuery, queryParams);
+    const totalCount = fecthTodo[0]?.total_count;
+    if (fecthTodo.length === 0) {
       throw new NotFoundException(ERROR_MESSAGES.TODO_NOT_FOUND);
     }
     return response
       .status(HttpStatus.OK)
-      .json(APIResponse.success(apiId, { totalCount, result }, "OK"));
+      .json(APIResponse.success(apiId, { totalCount, fecthTodo }, "OK"));
   }
 
   async createSearchQuery(filters) {
@@ -149,13 +149,13 @@ export class TodoService {
 
   async updateTodo(id: string, updateTodoDto, response) {
     const apiId = API_ID.UPDATE_TODO;
-    const todo = await this.todoRepository.findOne({ where: { todo_id: id } });
+    const todoItem = await this.todoRepository.findOne({ where: { todo_id: id } });
 
-    if (!todo) {
+    if (!todoItem) {
       throw new NotFoundException(ERROR_MESSAGES.NOT_FOUND);
     }
 
-    if (todo.status === "archived") {
+    if (todoItem.status === "archived") {
       throw new NotFoundException(ERROR_MESSAGES.TODO_ARCHIVED);
     }
     const actionKeys = [
@@ -173,24 +173,24 @@ export class TodoService {
     const isActionFieldPresent = actionKeys.some((key) => key in updateTodoDto);
 
     if (isActionFieldPresent) {
-      if (todo.status !== "incomplete") {
+      if (todoItem.status !== "incomplete") {
         throw new BadRequestException(ERROR_MESSAGES.TODO_NOT_INCOMPLETE);
       }
-      this.checkAuthorization(updateTodoDto.updated_by, todo.assigned_by);
-      this.updateTodoFields(todo, updateTodoDto);
+      this.checkAuthorization(updateTodoDto.updated_by, todoItem.assigned_by);
+      this.updateTodoFields(todoItem, updateTodoDto);
     }
 
     if (updateTodoDto.status) {
-      this.validateStatusUpdate(todo, updateTodoDto.updated_by);
+      this.validateStatusUpdate(todoItem, updateTodoDto.updated_by);
 
       if (updateTodoDto.status === "rejected") {
-        todo.status = "rejected";
+        todoItem.status = "rejected";
       } else if (updateTodoDto.status === "completed") {
-        todo.status = "completed";
+        todoItem.status = "completed";
       }
     }
-    todo.completion_date = new Date();
-    await this.todoRepository.save(todo);
+    todoItem.completion_date = new Date();
+    await this.todoRepository.save(todoItem);
     return response
       .status(HttpStatus.OK)
       .json(APIResponse.success(apiId, updateTodoDto, "OK"));
@@ -228,23 +228,23 @@ export class TodoService {
 
   async getTodoById(todo_id: string, response) {
     const apiId = API_ID.GET_TODO;
-    const result = await this.todoRepository.findOne({
+    const todoItem = await this.todoRepository.findOne({
       where: { todo_id: todo_id, state: Not("archived") },
     });
-    if (!result) {
+    if (!todoItem) {
       throw new NotFoundException(ERROR_MESSAGES.NOT_FOUND);
     }
     return response
       .status(HttpStatus.OK)
-      .json(APIResponse.success(apiId, result, "OK"));
+      .json(APIResponse.success(apiId, todoItem, "OK"));
   }
 
   async deleteTodoById(todo_id: string, response) {
     const apiId = API_ID.DELETE_TODO;
-    const result = await this.todoRepository.findOne({
+    const todoItem = await this.todoRepository.findOne({
       where: { todo_id, state: Not("archived") },
     });
-    if (!result) {
+    if (!todoItem) {
       throw new NotFoundException(ERROR_MESSAGES.NOT_FOUND);
     }
     const updateStatus = await this.todoRepository.update(
