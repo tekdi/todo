@@ -1,4 +1,4 @@
-name: Deploy to Middleware on Dev EKS Cluster
+name: Todo on Dev EKS Cluster Deployment
 on:
   push:
     branches:
@@ -69,7 +69,7 @@ jobs:
         kubectl delete deployment todo-service
         kubectl delete service todo-service
         kubectl delete cm todo-config
-        kubectl apply -f manifest/todo-updated.yaml
+        kubectl apply -f manifest/todo-service-updated.yaml
         kubectl apply -f manifest/configmap.yaml
         sleep 10
         kubectl get pods
