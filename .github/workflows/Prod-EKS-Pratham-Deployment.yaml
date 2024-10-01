@@ -1,6 +1,8 @@
 name: PROD todo-service Deployment on EKS Cluster
 on:
-  workflow_dispatch:
+  push:
+    branches:
+      - main  
 env:
   ECR_REPOSITORY: ${{ secrets.ECR_REPOSITORY_PROD }}
   EKS_CLUSTER_NAME: ${{ secrets.EKS_CLUSTER_NAME_PROD }}
