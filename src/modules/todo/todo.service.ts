@@ -274,10 +274,10 @@ export class TodoService {
       { state: "archived" },
     );
     LoggerUtil.log(
-      `Archived Todo with ID ${todo_id} successfully`, // message
-      'TodoService',                                  // context
-      '/todo/delete',                                           // user (optional)
-      'info'                                          // log level (optional, defaults to 'info')
+      `Archived Todo with ID ${todo_id} successfully`,
+      'TodoService',
+      '/todo/delete',
+      'info'
     );
     return response
       .status(HttpStatus.OK)
