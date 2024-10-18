@@ -14,6 +14,7 @@ import { Todo } from "./entity/todo.entity";
 import { Not, Repository } from "typeorm";
 import { FilterRequestDTO } from "./dto/list-todo.dto";
 import { UpdateTodoDto } from "./dto/update-todo.dto";
+import { LoggerUtil } from "src/common/logger/LoggerUtil";
 
 @Injectable()
 export class TodoService {
@@ -36,6 +37,8 @@ export class TodoService {
     }
 
     const saveTodo = await this.todoRepository.save(createTodoDto);
+    // Log the success message
+    LoggerUtil.log(`Todo item created successfully by ${createTodoDto.assigned_by}  with ID: ${saveTodo.todo_id}`, 'TodoService', '/create/todo');
     return response
       .status(HttpStatus.CREATED)
       .json(APIResponse.success(apiId, saveTodo, "CREATED"));
@@ -88,6 +91,12 @@ export class TodoService {
     if (fecthTodo.length === 0) {
       throw new NotFoundException(ERROR_MESSAGES.TODO_NOT_FOUND);
     }
+    LoggerUtil.log(
+      `Successfully fetched todos`,
+      'TodoService',
+      '/todo/list',
+      'info'
+    );
     return response
       .status(HttpStatus.OK)
       .json(APIResponse.success(apiId, { totalCount, fecthTodo }, "OK"));
@@ -191,6 +200,11 @@ export class TodoService {
     }
     todoItem.completion_date = new Date();
     await this.todoRepository.save(todoItem);
+    LoggerUtil.log(
+      `Todo with ID ${id} updated successfully`,
+      'TodoService',
+      `Updated By: ${updateTodoDto.updated_by}`,
+      'info');
     return response
       .status(HttpStatus.OK)
       .json(APIResponse.success(apiId, updateTodoDto, "OK"));
@@ -234,6 +248,12 @@ export class TodoService {
     if (!todoItem) {
       throw new NotFoundException(ERROR_MESSAGES.NOT_FOUND);
     }
+    LoggerUtil.log(
+      `Fetched Todo with ID ${todo_id} successfully`,
+      'TodoService',
+      '/todo/getById',
+      'info'
+    );
     return response
       .status(HttpStatus.OK)
       .json(APIResponse.success(apiId, todoItem, "OK"));
@@ -252,6 +272,12 @@ export class TodoService {
         todo_id,
       },
       { state: "archived" },
+    );
+    LoggerUtil.log(
+      `Archived Todo with ID ${todo_id} successfully`, // message
+      'TodoService',                                  // context
+      '/todo/delete',                                           // user (optional)
+      'info'                                          // log level (optional, defaults to 'info')
     );
     return response
       .status(HttpStatus.OK)
