@@ -7,7 +7,7 @@ import {
 } from "@nestjs/common";
 import { CreateTodoDto } from "./dto/create-todo.dto";
 import { Response } from "express";
-import { API_ID, ERROR_MESSAGES } from "src/common/utils/constants.util";
+import { API_ID, ERROR_MESSAGES, SUCCESS_MESSAGES } from "src/common/utils/constants.util";
 import APIResponse from "src/common/utils/response";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Todo } from "./entity/todo.entity";
@@ -23,7 +23,7 @@ export class TodoService {
     private readonly todoRepository: Repository<Todo>,
   ) { }
 
-  async createTodo(createTodoDto: CreateTodoDto, response: Response) {
+  async createTodo(createTodoDto: CreateTodoDto, userId: string, response: Response) {
     const apiId = API_ID.CREATE_TODO;
     if (createTodoDto?.action_data?.action_name) {
       const existTodo = await this.checkExistingRequest(
@@ -31,6 +31,8 @@ export class TodoService {
         createTodoDto.context_id,
         createTodoDto.action_data.action_name,
       );
+      createTodoDto.created_by = userId;
+      createTodoDto.updated_by = userId;
       if (existTodo) {
         throw new BadRequestException(ERROR_MESSAGES.REQUESTED);
       }
@@ -38,7 +40,7 @@ export class TodoService {
 
     const saveTodo = await this.todoRepository.save(createTodoDto);
     // Log the success message
-    LoggerUtil.log(`Todo item created successfully by ${createTodoDto.assigned_by}  with ID: ${saveTodo.todo_id}`, 'TodoService', '/create/todo');
+    LoggerUtil.log(SUCCESS_MESSAGES.TODO_CREATED_SUCCESSFULLY(createTodoDto.assigned_by, saveTodo.todo_id), 'TodoService', '/create/todo');
     return response
       .status(HttpStatus.CREATED)
       .json(APIResponse.success(apiId, saveTodo, "CREATED"));
@@ -60,7 +62,7 @@ export class TodoService {
       .getOne();
     return isExistTodo;
   }
-  async viewListTodo(filterRequestDTO: FilterRequestDTO, response: Response) {
+  async viewListTodo(filterRequestDTO: FilterRequestDTO, userId: string, response: Response) {
     const apiId = API_ID.LIST_TODO;
     const { filters } = filterRequestDTO;
     let finalQuery = `SELECT *,COUNT(*) OVER() AS total_count FROM public."todo"`;
@@ -92,10 +94,9 @@ export class TodoService {
       throw new NotFoundException(ERROR_MESSAGES.TODO_NOT_FOUND);
     }
     LoggerUtil.log(
-      `Successfully fetched todos`,
-      'TodoService',
-      '/todo/list',
-      'info'
+      SUCCESS_MESSAGES.TODO_FETCHED_SUCCESSFULLY,
+      'todo/list',
+      `userId: ${userId}`
     );
     return response
       .status(HttpStatus.OK)
@@ -156,8 +157,9 @@ export class TodoService {
     return { whereClauses, queryParams };
   }
 
-  async updateTodo(id: string, updateTodoDto, response) {
+  async updateTodo(id: string, updateTodoDto, userId: string, response) {
     const apiId = API_ID.UPDATE_TODO;
+    updateTodoDto.updated_by = userId;
     const todoItem = await this.todoRepository.findOne({ where: { todo_id: id } });
 
     if (!todoItem) {
@@ -201,10 +203,9 @@ export class TodoService {
     todoItem.completion_date = new Date();
     await this.todoRepository.save(todoItem);
     LoggerUtil.log(
-      `Todo with ID ${id} updated successfully`,
-      'TodoService',
-      `Updated By: ${updateTodoDto.updated_by}`,
-      'info');
+      SUCCESS_MESSAGES.TODO_UPDATED_SUCCESSFULLY(id),
+      '/todo/update',
+      `user : ${userId}`);
     return response
       .status(HttpStatus.OK)
       .json(APIResponse.success(apiId, updateTodoDto, "OK"));
@@ -240,32 +241,31 @@ export class TodoService {
     }
   }
 
-  async getTodoById(todo_id: string, response) {
+  async getTodoById(todo_id: string, userId: string, response) {
     const apiId = API_ID.GET_TODO;
     const todoItem = await this.todoRepository.findOne({
       where: { todo_id: todo_id, state: Not("archived") },
     });
     if (!todoItem) {
-      throw new NotFoundException(ERROR_MESSAGES.NOT_FOUND);
+      throw new NotFoundException(ERROR_MESSAGES.TODO_NOTFOUND);
     }
     LoggerUtil.log(
-      `Fetched Todo with ID ${todo_id} successfully`,
-      'TodoService',
+      SUCCESS_MESSAGES.TODO_FETCHED_WITH_ID(todo_id),
       '/todo/getById',
-      'info'
+      `userId: ${userId}`
     );
     return response
       .status(HttpStatus.OK)
       .json(APIResponse.success(apiId, todoItem, "OK"));
   }
 
-  async deleteTodoById(todo_id: string, response) {
+  async deleteTodoById(todo_id: string, userId: string, response) {
     const apiId = API_ID.DELETE_TODO;
     const todoItem = await this.todoRepository.findOne({
       where: { todo_id, state: Not("archived") },
     });
     if (!todoItem) {
-      throw new NotFoundException(ERROR_MESSAGES.NOT_FOUND);
+      throw new NotFoundException(ERROR_MESSAGES.TODO_NOT_FOUND);
     }
     const updateStatus = await this.todoRepository.update(
       {
@@ -274,10 +274,9 @@ export class TodoService {
       { state: "archived" },
     );
     LoggerUtil.log(
-      `Archived Todo with ID ${todo_id} successfully`,
-      'TodoService',
+      SUCCESS_MESSAGES.TODO_DELETED(todo_id),
       '/todo/delete',
-      'info'
+      `userId : ${userId}`
     );
     return response
       .status(HttpStatus.OK)
