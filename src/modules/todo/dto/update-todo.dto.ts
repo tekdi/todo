@@ -117,12 +117,12 @@ export class UpdateTodoDto {
   })
   spent_time?: string;
 
-  @ApiProperty({
-    type: String,
-    description: "updatedBy",
-    example: "eff008a8-2573-466d-b877-fddf6a4fc13e",
-  })
-  @IsString()
+  // @ApiProperty({
+  //   type: String,
+  //   description: "updatedBy",
+  //   example: "eff008a8-2573-466d-b877-fddf6a4fc13e",
+  // })
+  // @IsString()
   updated_by: string;
 
   @ValidateIf(

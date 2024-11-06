@@ -151,20 +151,20 @@ export class CreateTodoDto {
   @Type(() => ActionDataDto)
   action_data: ActionDataDto;
 
-  @ApiProperty({
-    type: String,
-    description: "created_by",
-    example: "eff008a8-2573-466d-b877-fddf6a4fc13e",
-  })
-  @IsNotEmpty()
+  // @ApiProperty({
+  //   type: String,
+  //   description: "created_by",
+  //   example: "eff008a8-2573-466d-b877-fddf6a4fc13e",
+  // })
+  // @IsNotEmpty()
   created_by: string;
 
-  @ApiProperty({
-    type: String,
-    description: "updated_by",
-    example: "eff008a8-2573-466d-b877-fddf6a4fc13e",
-  })
-  @IsNotEmpty()
+  // @ApiProperty({
+  //   type: String,
+  //   description: "updated_by",
+  //   example: "eff008a8-2573-466d-b877-fddf6a4fc13e",
+  // })
+  // @IsNotEmpty()
   updated_by: string;
 
   @ApiProperty({
