@@ -53,7 +53,7 @@ export class TodoController {
     @Res() response: Response,
     @Req() request: Request,
   ) {
-    const userId: string = checkValidUserId(request.query.userid);
+    const userId: string = checkValidUserId(request.query.userId);
     return await this.todoService.createTodo(createTodoDto, userId, response);
   }
 
@@ -66,9 +66,9 @@ export class TodoController {
   async viewList(
     @Res() response: Response,
     @Body() filterRequestDTO: FilterRequestDTO,
-    @Query('userid') userid: string | null
+    @Query('userId') userId: string | null
   ) {
-    return await this.todoService.viewListTodo(filterRequestDTO, userid, response);
+    return await this.todoService.viewListTodo(filterRequestDTO, userId, response);
   }
 
   @UseFilters(new AllExceptionsFilter(API_ID.UPDATE_TODO))
@@ -82,22 +82,22 @@ export class TodoController {
     @Res() response: Response,
     @Req() request: Request
   ) {
-    const userId: string = checkValidUserId(request.query.userid);
+    const userId: string = checkValidUserId(request.query.userId);
     return await this.todoService.updateTodo(id, updateTodo, userId, response);
   }
 
   @UseFilters(new AllExceptionsFilter(API_ID.GET_TODO))
   @Get("/:id")
   @ApiOkResponse({ description: SUCCESS_MESSAGES.TODO_BYID })
-  async todoGetById(@Res() response: Response, @Param("id") id: string, @Query('userid') userid: string | null,) {
-    return await this.todoService.getTodoById(id, userid, response);
+  async todoGetById(@Res() response: Response, @Param("id") id: string, @Query('userId') userId: string | null,) {
+    return await this.todoService.getTodoById(id, userId, response);
   }
 
   @UseFilters(new AllExceptionsFilter(API_ID.DELETE_TODO))
   @Delete("/:id")
   @ApiOkResponse({ description: SUCCESS_MESSAGES.TODO_DELETE })
   async deleteTodoById(@Res() response: Response, @Param("id") id: string, @Req() request: Request) {
-    const userId: string = checkValidUserId(request.query.userid);
+    const userId: string = checkValidUserId(request.query.userId);
     return await this.todoService.deleteTodoById(id, userId, response);
   }
 }
