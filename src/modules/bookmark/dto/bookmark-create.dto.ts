@@ -1,0 +1,60 @@
+import { Expose } from "class-transformer";
+import {
+  IsNotEmpty,
+  IsUUID,
+  Matches,
+  IsIn,
+  ValidateIf,
+  Validate,
+} from "class-validator";
+import { ApiProperty } from "@nestjs/swagger";
+import { IsUserIdNotEqualToDoId } from "src/common/utils/custom-validation";
+
+export class BookmarkCreateDto {
+  @ApiProperty({
+    type: String,
+    description: "User ID who is creating the bookmark",
+    example: "123e4567-e89b-12d3-a456-426614174000"
+  })
+  @Expose()
+  @IsNotEmpty({ message: "User ID is required" })
+  @IsUUID(undefined, { message: "User ID must be a valid UUID" })
+  userId: string;
+
+  @ApiProperty({
+    type: String,
+    description: "Type of entity being bookmarked",
+    example: "course",
+    enum: ["course", "content"]
+  })
+  @Expose()
+  @IsNotEmpty({ message: "Entity type is required" })
+  @IsIn(["course", "content"], { message: "Entity type must be either 'course' or 'content'" })
+  entityType: string;
+
+  @ApiProperty({
+    type: String,
+    description: "Unique identifier for the content (do_id format: do_ followed by 22 digits)",
+    example: "do_2143394843223982081867"
+  })
+  @Expose()
+  @IsNotEmpty({ message: "Do ID is required" })
+  @Matches(/^do_\d{22}$/, { message: "Do ID must be in format 'do_' followed by exactly 22 digits" })
+  @Validate(IsUserIdNotEqualToDoId)
+  doId: string;
+
+  @ApiProperty({
+    type: String,
+    description: "Action to perform",
+    example: "add",
+    enum: ["add", "remove"]
+  })
+  @Expose()
+  @IsNotEmpty({ message: "Action is required" })
+  @IsIn(["add", "remove"], { message: "Action must be either 'add' or 'remove'" })
+  action: string;
+
+  constructor(partial: Partial<BookmarkCreateDto>) {
+    Object.assign(this, partial);
+  }
+} 

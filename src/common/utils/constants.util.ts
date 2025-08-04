@@ -19,7 +19,12 @@ export const ERROR_MESSAGES = {
   TODO_NOT_INCOMPLETE: "you can not edit field beacuse event is not incomplete",
   PROVIDE_ONE_USERID_IN_QUERY: 'Please provide userid in query param',
   USERID_INVALID: 'Invalid UUID',
-  TODO_NOTFOUND: 'Todo not found'
+  TODO_NOTFOUND: 'Todo not found',
+  BOOKMARK_NOT_FOUND: 'Bookmark not found',
+  BOOKMARK_ALREADY_EXISTS: 'Bookmark already exists',
+  ENTITY_TYPE_REQUIRED: 'Entity type is required',
+  INVALID_ENTITY_TYPE: 'Entity type must be either course or content',
+  USER_DOID_SAME: 'User ID and Do ID cannot be the same'
 };
 
 export const SUCCESS_MESSAGES = {
@@ -32,7 +37,10 @@ export const SUCCESS_MESSAGES = {
   TODO_FETCHED_SUCCESSFULLY: `Successfully fetched todos list`,
   TODO_UPDATED_SUCCESSFULLY: (id) => `Todo with ID ${id} updated successfully `,
   TODO_FETCHED_WITH_ID: (todo_id) => `Fetched Todo with ID ${todo_id} successfully`,
-  TODO_DELETED: (todo_id) => `Todo deleted with ID ${todo_id} successfully `
+  TODO_DELETED: (todo_id) => `Todo deleted with ID ${todo_id} successfully `,
+  BOOKMARK_CREATED: 'Bookmark created successfully',
+  BOOKMARK_REMOVED: 'Bookmark removed successfully',
+  BOOKMARK_LIST_FETCHED: (entityType) => `User's ${entityType} bookmarks retrieved successfully`
 };
 
 export const API_ID = {
@@ -41,4 +49,7 @@ export const API_ID = {
   GET_TODO: "api.todo.get",
   UPDATE_TODO: "api.todo.update",
   DELETE_TODO: "api.todo.delete",
+  BOOKMARK_CREATE: "api.bookmark.create",
+  BOOKMARK_GET: "api.bookmark.get",
+  BOOKMARK_REMOVE: "api.bookmark.remove",
 };
