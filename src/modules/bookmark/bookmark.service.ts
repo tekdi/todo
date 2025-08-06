@@ -2,15 +2,14 @@ import { Injectable } from "@nestjs/common";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Repository } from "typeorm";
 import { Response } from "express";
-import { Bookmark } from "src/modules/bookmark/entity/bookmark.entity";
-import { BookmarkCreateDto } from "src/modules/bookmark/dto/bookmark-create.dto";
-import { IBookmarkServicelocator } from "src/adapters/bookmarkservicelocator";
+import { Bookmark } from "./entity/bookmark.entity";
+import { BookmarkCreateDto } from "./dto/bookmark-create.dto";
 import { LoggerUtil } from "src/common/logger/LoggerUtil";
 import APIResponse from "src/common/utils/response";
-import { API_ID, ERROR_MESSAGES } from "src/common/utils/constants.util";
+import { API_ID, ERROR_MESSAGES, BOOKMARK_ACTIONS } from "src/common/utils/constants.util";
 
 @Injectable()
-export class PostgresBookmarkService implements IBookmarkServicelocator {
+export class BookmarkService {
   constructor(
     @InjectRepository(Bookmark)
     private bookmarkRepository: Repository<Bookmark>
@@ -23,7 +22,7 @@ export class PostgresBookmarkService implements IBookmarkServicelocator {
   ): Promise<void> {
     try {
       
-      if (bookmarkDto.action === "add") {
+      if (bookmarkDto.action === BOOKMARK_ACTIONS.ADD) {
         // Check if bookmark already exists (doId is unique across entityTypes)
         const existingBookmark = await this.bookmarkRepository.findOne({
           where: { 
@@ -62,7 +61,7 @@ export class PostgresBookmarkService implements IBookmarkServicelocator {
             "CREATED"
           )
         );
-      } else if (bookmarkDto.action === "remove") {
+      } else if (bookmarkDto.action === BOOKMARK_ACTIONS.REMOVE) {
         // Find and delete bookmark (doId is unique across entityTypes)
         const bookmark = await this.bookmarkRepository.findOne({
           where: { 
@@ -115,7 +114,7 @@ export class PostgresBookmarkService implements IBookmarkServicelocator {
       
       response.status(500).json(
         APIResponse.error(
-          bookmarkDto.action === "add" ? API_ID.BOOKMARK_CREATE : API_ID.BOOKMARK_REMOVE,
+          bookmarkDto.action === BOOKMARK_ACTIONS.ADD ? API_ID.BOOKMARK_CREATE : API_ID.BOOKMARK_REMOVE,
           ERROR_MESSAGES.INTERNAL_SERVER_ERROR,
           "InternalServerError",
           "500"

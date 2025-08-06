@@ -5,6 +5,7 @@ import {
   IsIn,
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
+import { ENTITY_TYPES } from "src/common/utils/constants.util";
 
 export class GetBookmarksDto {
   @ApiProperty({
@@ -21,11 +22,11 @@ export class GetBookmarksDto {
     type: String,
     description: "Type of entity to filter bookmarks",
     example: "course",
-    enum: ["course", "content"]
+    enum: [ENTITY_TYPES.COURSE, ENTITY_TYPES.CONTENT]
   })
   @Expose()
   @IsNotEmpty({ message: "Entity type is required" })
-  @IsIn(["course", "content"], { message: "Entity type must be either 'course' or 'content'" })
+  @IsIn([ENTITY_TYPES.COURSE, ENTITY_TYPES.CONTENT], { message: "Entity type must be either 'course' or 'content'" })
   entityType: string;
 
   constructor(partial: Partial<GetBookmarksDto>) {

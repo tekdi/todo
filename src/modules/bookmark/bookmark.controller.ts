@@ -20,7 +20,7 @@ import {
   ApiQuery,
 } from "@nestjs/swagger";
 
-import { BookmarkAdapter } from "./bookmarkadapter";
+import { BookmarkService } from "./bookmark.service";
 import { BookmarkCreateDto } from "./dto/bookmark-create.dto";
 import { GetBookmarksDto } from "./dto/get-bookmarks.dto";
 import { Response } from "express";
@@ -30,7 +30,7 @@ import { API_ID, ERROR_MESSAGES, SUCCESS_MESSAGES } from "src/common/utils/const
 @ApiTags("Bookmark")
 @Controller('bookmark')
 export class BookmarkController {
-  constructor(private bookmarkAdapter: BookmarkAdapter) {}
+  constructor(private bookmarkService: BookmarkService) {}
 
   // Get all bookmarks
   @UseFilters(new AllExceptionsFilter(API_ID.BOOKMARK_GET))
@@ -51,8 +51,7 @@ export class BookmarkController {
     @Query() getBookmarksDto: GetBookmarksDto,
     @Res() response: Response
   ) {
-    const adapter = this.bookmarkAdapter.buildBookmarkAdapter();
-    await adapter.getAllBookmarksByUserIdAndentityType(getBookmarksDto.userId, getBookmarksDto.entityType, response);
+    await this.bookmarkService.getAllBookmarksByUserIdAndentityType(getBookmarksDto.userId, getBookmarksDto.entityType, response);
   }
 
   // Create or Remove bookmark
@@ -75,7 +74,6 @@ export class BookmarkController {
     @Body() bookmarkCreateDto: BookmarkCreateDto,
     @Res() response: Response
   ) {
-    const adapter = this.bookmarkAdapter.buildBookmarkAdapter();
-    await adapter.createBookmark(bookmarkCreateDto, bookmarkCreateDto.userId, response);
+    await this.bookmarkService.createBookmark(bookmarkCreateDto, bookmarkCreateDto.userId, response);
   }
 } 

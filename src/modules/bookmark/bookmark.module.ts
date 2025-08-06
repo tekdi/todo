@@ -1,11 +1,12 @@
 import { Module } from "@nestjs/common";
 import { BookmarkController } from "./bookmark.controller";
-import { BookmarkAdapter } from "./bookmarkadapter";
-import { PostgresModule } from "src/adapters/postgres/postgres-module";
+import { BookmarkService } from "./bookmark.service";
+import { Bookmark } from "./entity/bookmark.entity";
+import { TypeOrmModule } from "@nestjs/typeorm";
 
 @Module({
-  imports: [PostgresModule],
+  imports: [TypeOrmModule.forFeature([Bookmark])],
+  providers: [BookmarkService],
   controllers: [BookmarkController],
-  providers: [BookmarkAdapter],
 })
 export class BookmarkModule {} 

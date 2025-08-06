@@ -9,6 +9,7 @@ import {
 } from "class-validator";
 import { ApiProperty } from "@nestjs/swagger";
 import { IsUserIdNotEqualToDoId } from "src/common/utils/custom-validation";
+import { BOOKMARK_ACTIONS, ENTITY_TYPES } from "src/common/utils/constants.util";
 
 export class BookmarkCreateDto {
   @ApiProperty({
@@ -25,11 +26,11 @@ export class BookmarkCreateDto {
     type: String,
     description: "Type of entity being bookmarked",
     example: "course",
-    enum: ["course", "content"]
+    enum: [ENTITY_TYPES.COURSE, ENTITY_TYPES.CONTENT]
   })
   @Expose()
   @IsNotEmpty({ message: "Entity type is required" })
-  @IsIn(["course", "content"], { message: "Entity type must be either 'course' or 'content'" })
+  @IsIn([ENTITY_TYPES.COURSE, ENTITY_TYPES.CONTENT], { message: "Entity type must be either 'course' or 'content'" })
   entityType: string;
 
   @ApiProperty({
@@ -47,11 +48,11 @@ export class BookmarkCreateDto {
     type: String,
     description: "Action to perform",
     example: "add",
-    enum: ["add", "remove"]
+    enum: [BOOKMARK_ACTIONS.ADD, BOOKMARK_ACTIONS.REMOVE]
   })
   @Expose()
   @IsNotEmpty({ message: "Action is required" })
-  @IsIn(["add", "remove"], { message: "Action must be either 'add' or 'remove'" })
+  @IsIn([BOOKMARK_ACTIONS.ADD, BOOKMARK_ACTIONS.REMOVE], { message: "Action must be either 'add' or 'remove'" })
   action: string;
 
   constructor(partial: Partial<BookmarkCreateDto>) {

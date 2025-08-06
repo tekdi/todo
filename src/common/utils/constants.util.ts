@@ -53,3 +53,13 @@ export const API_ID = {
   BOOKMARK_GET: "api.bookmark.get",
   BOOKMARK_REMOVE: "api.bookmark.remove",
 };
+
+export const BOOKMARK_ACTIONS = {
+  ADD: "add",
+  REMOVE: "remove",
+} as const;
+
+export const ENTITY_TYPES = {
+  COURSE: "course",
+  CONTENT: "content",
+} as const;
