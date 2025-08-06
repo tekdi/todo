@@ -1,4 +1,4 @@
-module.exports = {
+{
 	"routes": [
 		{
 			"sourceRoute": "/interface/v1/todo/bookmark/read",
