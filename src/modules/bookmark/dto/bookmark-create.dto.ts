@@ -35,12 +35,12 @@ export class BookmarkCreateDto {
 
   @ApiProperty({
     type: String,
-    description: "Unique identifier for the content (do_id format: do_ followed by 22 digits)",
+    description: "Unique identifier for the content (do_id format: do_ followed by digits)",
     example: "do_2143394843223982081867"
   })
   @Expose()
   @IsNotEmpty({ message: "Do ID is required" })
-  @Matches(/^do_\d{22}$/, { message: "Do ID must be in format 'do_' followed by exactly 22 digits" })
+  @Matches(/^do_\d+$/, { message: "Do ID must be in format 'do_' followed by digits" })
   @Validate(IsUserIdNotEqualToDoId)
   doId: string;
 
