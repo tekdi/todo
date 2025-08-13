@@ -36,8 +36,6 @@ export class BookmarkController {
   @UseFilters(new AllExceptionsFilter(API_ID.BOOKMARK_GET))
   @Get("/read")
   @UsePipes(new ValidationPipe({ 
-    whitelist: true, 
-    forbidNonWhitelisted: true,
     transform: true,
     transformOptions: { enableImplicitConversion: true }
   }))
@@ -58,8 +56,6 @@ export class BookmarkController {
   @UseFilters(new AllExceptionsFilter(API_ID.BOOKMARK_CREATE))
   @Post("/create")
   @UsePipes(new ValidationPipe({ 
-    whitelist: true, 
-    forbidNonWhitelisted: true,
     transform: true,
     transformOptions: { enableImplicitConversion: true }
   }))
